@@ -29,8 +29,7 @@ module Robotto
 
         # Adds keyboard block.
         #
-        # @param keyboard_block [Proc] - keyboard executable block.
-        #
+        # @param block [Proc] - keyboard executable block.
         def keyboard(&block)
           raise "Global state doesn't support :keyboard method" if global?
 

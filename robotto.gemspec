@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
   s.executables << 'robotto'
   s.required_ruby_version = '>= 3.1.0'
 
-  s.add_dependency 'concurrent-ruby-edge', '~> 0.6.0'
+  s.add_dependency 'concurrent-ruby-edge', '~> 0.7.0'
   s.add_dependency 'telegram-bot-ruby'
   s.add_dependency 'typhoeus'
   s.add_dependency 'mongo'

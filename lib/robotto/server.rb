@@ -23,8 +23,7 @@ module Robotto
       Telegram::Bot::Client.run(@bot_token) do |bot|
         @pool.api = bot.api
         @pool.spawn!
-        puts "Bot is running...\n".green
-        bot.listen { |message| @pool << message }
+        bot.listen { |message| @pool << Robotto::Types::Message.new(message.as_json) }
       end
     end
 
@@ -33,6 +32,6 @@ module Robotto
       puts "Server stopped...".yellow.bold
     end
 
-    at_exit { instance.stop! }
+    at_exit { instance&.stop! }
   end
 end

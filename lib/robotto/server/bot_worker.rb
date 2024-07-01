@@ -35,7 +35,7 @@ module Robotto
       end
 
       def notify!(message)
-        @ractor.send(message)
+        @ractor.send(Ractor.make_shareable(message), move: true)
       end
 
 
@@ -44,11 +44,10 @@ module Robotto
           Ractor.new(self) do |worker|
             processor = Processor::Base.new
             while worker.status && (message = receive)
-              processor.process_message(Telegram::Bot::Types::Message.new(message))
-              job_started!
+              puts message.message_id
+              # processor.process_message(message)
+              worker.job_started!
               begin
-                worker.api.send_message(chat_id: message['from']['chat_id'], text: 'test')
-                # worker.process_job!(message)
               rescue StandardError => e
                 puts e.message
                 puts e.backtrace

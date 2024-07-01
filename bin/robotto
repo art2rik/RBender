@@ -65,7 +65,7 @@ class RobottoCLI
     end
   end
 
-  desc "Telegram Bot Api Schema operations(print #{'robotto help schema'.cyan} for more)"
+  desc "Telegram Bot Api Schema operations(type #{'robotto help schema'.cyan} for more)"
   command :schema do |schema|
     schema.desc 'Updates or restores Telegram Bot Api schema from GitHub(https://ark0f.github.io/tg-bot-api/custom.json)'
     schema.command :update do |update|

@@ -2,7 +2,13 @@
 
 require 'robotto'
 
+project_dir = Dir.pwd
+
 Dir.chdir('boilerplates')
 Robotto::Support::TelegramBotApiSchema.new.update!
-puts "Schema updated!".green
-puts Robotto::Support::TelegramBotApiSchema.print_schema_version
+puts 'Schema updated!'.green
+Robotto::Support::TelegramBotApiSchema.print_schema_version
+Dir.chdir(project_dir)
+Robotto::Utils::TypesScaffoldGenerator
+  .update_type_classes('boilerplates/config/schema/telegram_bot_api_schema.json')
+puts 'Type classes updated'

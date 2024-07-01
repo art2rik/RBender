@@ -20,7 +20,7 @@ module Robotto
         return unless job
 
         worker = @free_workers.pop
-        worker.notify!(job.as_json.freeze)
+        worker.notify!(job)
       end
 
       def spawn!

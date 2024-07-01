@@ -1,14 +1,14 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'typhoeus'
 require 'net/http'
-require 'active_support/hash_with_indifferent_access'
-require 'active_support/core_ext/hash/indifferent_access'
 
 module Robotto
   module Support
     class TelegramBotApiSchema
-      SCHEMA_FILE_PATH = 'config/schema/telegram_bot_api_schema.json'.freeze
-      SCHEMA_URL = 'https://ark0f.github.io/tg-bot-api/custom.json'.freeze
+      SCHEMA_FILE_PATH = 'config/schema/telegram_bot_api_schema.json'
+      SCHEMA_URL = 'https://ark0f.github.io/tg-bot-api/custom.json'
 
       class << self
         attr_accessor :schema_version_ex
@@ -48,45 +48,13 @@ module Robotto
         def formatted
           return @formatted_schema if @formatted_schema
 
-          schema = new.open!
+          schema_obj = new
+          schema = schema_obj.open!
           formatted_schema = {}
-
           schema['methods'].each do |method|
-            formatted_schema[method['name'].underscore] =
-              {
-                name: method['name'],
-                description: method['description'],
-                link: method['documentation_link'],
-                arguments_list:
-                  method['arguments']&.map { |arg| arg['name'] } || [],
-                arguments:
-                  method['arguments']&.map do |arg|
-                    argument_info =
-                      {
-                        name: arg['name'],
-                        description: arg['description'],
-                        required: arg['required'],
-                        type: arg['type'],
-                        default: arg['default'],
-                        min: arg['min'],
-                        max: arg['max'],
-                        array: arg['array'],
-                        reference: arg['reference'],
-                        any_of: arg['any_of'],
-                        min_len: arg['min_len'],
-                        max_len: arg['max_len'],
-                        enum: arg['enumeration'],
-                      }
-
-                    [arg['name'], argument_info]
-                  end.to_h.deep_symbolize_keys || {}
-              }
+            formatted_schema[method['name'].underscore] = schema_obj.method_hash(method)
           end
-          formatted_schema['_info'] =
-            {
-              version: schema['version'],
-              recent_changes: schema['recent_changes']
-            }
+          formatted_schema['_info'] = schema_obj.info_hash
 
           @formatted_schema = formatted_schema.with_indifferent_access.freeze
         end
@@ -113,6 +81,10 @@ module Robotto
           end
 
           puts output
+        end
+
+        def raw_schema
+          new.open!
         end
 
         def reset_schema!
@@ -147,8 +119,6 @@ module Robotto
       #
       # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
       def open!
-        # TODO: Make schema store to a bot side. Auto-update schema.
-        # TODO: Bot/Gem side command to update schema.
         @schema =
           if File.exist?(schema_path)
             JSON.load_file(File.open(schema_path))
@@ -181,6 +151,45 @@ module Robotto
         self.class.reset_schema!
 
         schema
+      end
+
+      def method_hash(method)
+        {
+          name: method['name'],
+          description: method['description'],
+          link: method['documentation_link'],
+          arguments_list:
+            method['arguments']&.map { |arg| arg['name'] } || [],
+          arguments:
+            method['arguments']&.map do |arg|
+              [arg['name'], argument_info_hash(arg)]
+            end.to_h.deep_symbolize_keys || {},
+        }
+      end
+
+      def argument_info_hash(arg)
+        {
+          name: arg['name'],
+          description: arg['description'],
+          required: arg['required'],
+          type: arg['type'],
+          default: arg['default'],
+          min: arg['min'],
+          max: arg['max'],
+          array: arg['array'],
+          reference: arg['reference'],
+          any_of: arg['any_of'],
+          min_len: arg['min_len'],
+          max_len: arg['max_len'],
+          enum: arg['enumeration'],
+        }
+      end
+
+      def info_hash
+        {
+          version: schema['version'],
+          recent_changes: schema['recent_changes'],
+        }
       end
     end
   end

@@ -3,7 +3,7 @@ PATH
   specs:
     robotto (1.0.1)
       colorize
-      concurrent-ruby-edge (~> 0.6.0)
+      concurrent-ruby-edge (~> 0.7.0)
       did_you_mean (>= 1.6.1)
       gli
       hacer
@@ -31,9 +31,9 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     colorize (0.8.1)
-    concurrent-ruby (1.1.10)
-    concurrent-ruby-edge (0.6.0)
-      concurrent-ruby (~> 1.1.6)
+    concurrent-ruby (1.2.0)
+    concurrent-ruby-edge (0.7.0)
+      concurrent-ruby (~> 1.2.0)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
     did_you_mean (1.6.3)
@@ -41,7 +41,7 @@ GEM
     dry-inflector (1.0.0)
     ethon (0.16.0)
       ffi (>= 1.15.0)
-    faraday (2.7.2)
+    faraday (2.7.4)
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
     faraday-multipart (1.0.4)
@@ -106,7 +106,7 @@ PLATFORMS
 DEPENDENCIES
   activesupport
   colorize
-  concurrent-ruby-edge (~> 0.6.0)
+  concurrent-ruby-edge (~> 0.7.0)
   did_you_mean (>= 1.6.1)
   gli
   hacer
@@ -117,7 +117,6 @@ DEPENDENCIES
   pry
   robotto!
   rspec
-  telegram-bot-ruby
   typhoeus
   zeitwerk
 
